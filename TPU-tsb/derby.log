@@ -1,0 +1,16 @@
+Thu Oct 20 11:30:26 ART 2016 : Apache Derby Network Server - 10.8.3.2 - (1557835) se ha iniciado y está listo para aceptar conexiones en el puerto 1527
+----------------------------------------------------------------
+Thu Oct 20 11:30:26 ART 2016:
+ Arrancando Derby versión The Apache Software Foundation - Apache Derby - 10.8.3.2 - (1557835): instancia a816c00e-0157-e280-1059-ffffb8c279e9 
+en el directorio de base de datos D:\TPU-tsb\TPU-tsb  con el cargador de clases sun.misc.Launcher$AppClassLoader@927e4be
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_79-b15
+user.dir=C:\Program Files\Java\jdk1.7.0_79\db
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=D:\TPU-tsb
+Cargador de clases de base de datos iniciado - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Oct 20 13:42:41 ART 2016: cerrando motor de Derby
