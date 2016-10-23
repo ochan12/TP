@@ -10,15 +10,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import tp.SimpleList;
 import tp.Palabra;
-/**
- *
- * @author a6
- */
-public class Principal extends javax.swing.JFrame {
 
-    private SimpleList<Palabra> listaPalabras;
+
+public class Principal extends javax.swing.JFrame {
+    
+    
     public Principal() {
         initComponents();
     }
@@ -59,22 +56,22 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(101, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btn_cargarLibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_verPalabra, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(146, 146, 146))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(98, 98, 98))))
+                        .addGap(98, 98, 98))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btn_cargarLibro, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                            .addComponent(btn_verPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(146, 146, 146))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(93, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(59, 59, 59)
+                .addGap(58, 58, 58)
                 .addComponent(btn_cargarLibro)
-                .addGap(28, 28, 28)
+                .addGap(29, 29, 29)
                 .addComponent(btn_verPalabra)
                 .addGap(51, 51, 51))
         );
@@ -95,7 +92,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void btn_cargarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarLibroActionPerformed
         JFileChooser fc =  new JFileChooser();
-        
+        File Finicial = new File ("F:\\Mauri\\GitHub\\TP\\Libros [TP Unico TSB 2014]");
+        fc.setCurrentDirectory(Finicial);
         fc.setFileFilter(new javax.swing.filechooser.FileFilter()
         {
             //Los archivos que aparencen en la ventanita
@@ -118,8 +116,7 @@ public class Principal extends javax.swing.JFrame {
         try{
             
             File f = fc.getSelectedFile();
-            listaPalabras = this.cargarPalabras(f);
-        
+            this.cargarPalabras(f);
             
         }
         catch(Exception e){
@@ -163,32 +160,45 @@ public class Principal extends javax.swing.JFrame {
         });
     }
     
-    private SimpleList cargarPalabras(File f){
-        SimpleList <Palabra> lista = new SimpleList();
-        if(!f.getName().endsWith(".txt")) return null;
-        try{
+    private void cargarPalabras(File f) {
+        
+        
+        if (!f.getName().endsWith(".txt")) {
+            return;
+        }
+        
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "8859_1"));
             String[] palabras = null;
-            FileReader fr = new FileReader(f);
-            BufferedReader br = new BufferedReader(fr);
-            String delimitadores = "[ .,;?!¡¿\\'\\\"\\\\[\\\\]]+";
-            String linea = br.readLine();
-            while(linea!=null){
+            
+            String delimitadores = "[ _.,;:?!¡¿\\'\\\"\\\\[\\[]\\]()~#*/-]+";
+            String linea = in.readLine();
+            
+            do {                
+                linea = in.readLine();
                 palabras = linea.split(delimitadores);
+                
                 for (String p : palabras) {
-                    lista.addFirst(new Palabra (p));
-                    System.out.println(p);
+                    if (!(p.contains("@") || p.contains("¡") ||p.contains("0") || p.contains("1") || p.contains("2") || p.contains("3") || p.contains("4") || p.contains("5") || p.contains("6") || p.contains("7") || p.contains("8") || p.contains("9"))) {
+                        
+                        p=p.toLowerCase();
+                        System.out.println(p.toLowerCase());
+                        
+                    }
                 }
-                linea = br.readLine();
-            }
-            
-            
-        }catch ( Exception e){
+            } while (linea != null);
+
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("Tamaño: "+lista.size());
-        this.setListaPalabras(lista);
-        return lista;
+
+        
+
+        
     }
+    
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cargarLibro;
@@ -197,11 +207,5 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
-    public SimpleList<Palabra> getListaPalabras() {
-        return listaPalabras;
-    }
-
-    public void setListaPalabras(SimpleList<Palabra> listaPalabras) {
-        this.listaPalabras = listaPalabras;
-    }
+   
 }
