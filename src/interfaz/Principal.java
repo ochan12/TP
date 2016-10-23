@@ -175,26 +175,23 @@ public class Principal extends javax.swing.JFrame {
             
             String delimitadores = "[ _.,;:?!¡¿\\'\\\"\\\\[\\[]\\]()~#*/-]+";
             String linea = in.readLine();
-            
-            while (linea != null){                
+            while (linea != null){
+                
                 palabras = linea.split(delimitadores);
                 for (String p : palabras) {
                     if (!(p.contains("@") || p.contains("¡") ||p.contains("0") || p.contains("1") || p.contains("2") || p.contains("3") || p.contains("4") || p.contains("5") || p.contains("6") || p.contains("7") || p.contains("8") || p.contains("9"))) {
                         
                         p=p.toLowerCase();                        
-                        if(!ht.isEmpty()&&ht.containsValue(p)){
+                        if(!ht.isEmpty()&&ht.containsKey(p.hashCode())){
                             ht.get(Math.abs(p.hashCode())).sumarContador();
-                            System.out.println(p.toLowerCase());
                         }
                         else ht.put(Math.abs(p.hashCode()), new Palabra(p));
-                        
                         
                     }
                 }
                 linea = in.readLine();
-            } 
+            }
             
-            System.out.println(ht.toString());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

@@ -1,6 +1,7 @@
 package tp;
 
 public class Palabra implements Comparable<Palabra>{
+    
     private String contenido;
     private int contador;
     
@@ -10,7 +11,7 @@ public class Palabra implements Comparable<Palabra>{
     }
     
     public void sumarContador(){
-        setContador(getContador() + 1);
+        this.contador++;
     }
 
     public String getContenido() {
