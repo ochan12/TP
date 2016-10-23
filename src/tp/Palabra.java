@@ -1,20 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tp;
 
-/**
- *
- * @author a2
- */
-public class Palabra {
-    private String palabra;
+public class Palabra implements Comparable<Palabra>{
+    private String contenido;
     private int contador;
     
     public Palabra(String s){
-        palabra = s;
+        contenido = s;
         contador = 1;
     }
     
@@ -22,12 +13,12 @@ public class Palabra {
         setContador(getContador() + 1);
     }
 
-    public String getPalabra() {
-        return palabra;
+    public String getContenido() {
+        return contenido;
     }
 
-    public void setPalabra(String palabra) {
-        this.palabra = palabra;
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
     }
 
     public int getContador() {
@@ -37,4 +28,9 @@ public class Palabra {
     public void setContador(int contador) {
         this.contador = contador;
     }
+    
+    public int compareTo(Palabra p){
+        return this.contenido.compareTo(p.contenido);
+    }
+    
 }

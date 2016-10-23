@@ -7,17 +7,19 @@ package interfaz;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import tp.Palabra;
+import tp.*;
 
 
 public class Principal extends javax.swing.JFrame {
-    
+   Hashtable <Integer, Palabra> ht;
     
     public Principal() {
         initComponents();
+        ht = new Hashtable();
     }
 
     /**
@@ -174,20 +176,25 @@ public class Principal extends javax.swing.JFrame {
             String delimitadores = "[ _.,;:?!¡¿\\'\\\"\\\\[\\[]\\]()~#*/-]+";
             String linea = in.readLine();
             
-            do {                
-                linea = in.readLine();
+            while (linea != null){                
                 palabras = linea.split(delimitadores);
-                
                 for (String p : palabras) {
                     if (!(p.contains("@") || p.contains("¡") ||p.contains("0") || p.contains("1") || p.contains("2") || p.contains("3") || p.contains("4") || p.contains("5") || p.contains("6") || p.contains("7") || p.contains("8") || p.contains("9"))) {
                         
-                        p=p.toLowerCase();
-                        System.out.println(p.toLowerCase());
+                        p=p.toLowerCase();                        
+                        if(!ht.isEmpty()&&ht.containsValue(p)){
+                            ht.get(Math.abs(p.hashCode())).sumarContador();
+                            System.out.println(p.toLowerCase());
+                        }
+                        else ht.put(Math.abs(p.hashCode()), new Palabra(p));
+                        
                         
                     }
                 }
-            } while (linea != null);
-
+                linea = in.readLine();
+            } 
+            
+            System.out.println(ht.toString());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
