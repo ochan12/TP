@@ -99,7 +99,6 @@ public class Principal extends javax.swing.JFrame {
         });
         if (selectorArchivo.showDialog(this, "Abrir") != JFileChooser.CANCEL_OPTION) {
             try {
-
                 File f = selectorArchivo.getSelectedFile();
                 gestor.cargarPalabras(f);
             } catch (Exception e) {

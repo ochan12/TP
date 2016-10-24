@@ -15,18 +15,19 @@ public class Gestor {
         hashTable = new Hashtable<Integer, Palabra>();
     }
     
-    public void cargarPalabras(File f) {
+    public void cargarPalabras(File archivo) {
             
-        if (!f.getName().endsWith(".txt")) {
+        if (!archivo.getName().endsWith(".txt")) {
             return;
         }
 
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "8859_1"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(archivo), "8859_1"));
             String[] palabras = null;
 
             String delimitadores = "[ _.,;:?!¡¿\\'\\\"\\\\[\\[]\\]()~#*/-]+";
             String linea = in.readLine();
+            
             while (linea != null) {
                 palabras = linea.split(delimitadores);
                 for (String p : palabras) {
@@ -45,7 +46,7 @@ public class Gestor {
                 linea = in.readLine();
             }
             
-            System.out.println(hashTable.toString());
+            
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
