@@ -26,10 +26,6 @@ public class Palabra implements Comparable<Palabra>{
         return contador;
     }
 
-    public void setContador(int contador) {
-        this.contador = contador;
-    }
-    
     public int compareTo(Palabra p){
         return this.contenido.compareTo(p.contenido);
     }
