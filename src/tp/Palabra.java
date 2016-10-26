@@ -1,13 +1,18 @@
 package tp;
 
+import java.util.ArrayList;
+
 public class Palabra implements Comparable<Palabra>{
     
     private String contenido;
     private int contador;
+    private ArrayList <Libro> libros;
+    
     
     public Palabra(String s){
         contenido = s;
         contador = 1;
+        libros = new ArrayList <Libro> ();
     }
     
     public void sumarContador(){
@@ -28,6 +33,10 @@ public class Palabra implements Comparable<Palabra>{
 
     public int compareTo(Palabra p){
         return this.contenido.compareTo(p.contenido);
+    }
+    
+    public void addLibro(Libro libro){
+        if(libro != null) libros.add(libro);
     }
     
 }
