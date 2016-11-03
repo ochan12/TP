@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import tp.*;
@@ -13,6 +14,7 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         gestor = new Gestor();
+        listaArchivosSeleccionados = new ArrayList<File>();
     }
 
     @SuppressWarnings("unchecked")
@@ -20,50 +22,76 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        btn_cargarLibro = new javax.swing.JButton();
+        btn_seleccionarLibros = new javax.swing.JButton();
         btn_verPalabra = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaLibros = new javax.swing.JList();
+        btn_cargarPalabras = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btn_cargarLibro.setText("Cargar Libro/s");
-        btn_cargarLibro.addActionListener(new java.awt.event.ActionListener() {
+        btn_seleccionarLibros.setText("Seleccionar Libros");
+        btn_seleccionarLibros.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cargarLibroActionPerformed(evt);
+                btn_seleccionarLibrosActionPerformed(evt);
             }
         });
 
         btn_verPalabra.setText("Ver Palabras");
+        btn_verPalabra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_verPalabraActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Verdana", 2, 18)); // NOI18N
         jLabel1.setText("Trabajo Práctico Único");
+
+        jScrollPane1.setViewportView(listaLibros);
+
+        btn_cargarPalabras.setText("Cargar Palabras");
+        btn_cargarPalabras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cargarPalabrasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(101, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(98, 98, 98))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btn_cargarLibro, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                            .addComponent(btn_verPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(146, 146, 146))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btn_seleccionarLibros, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn_verPalabra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_cargarPalabras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(92, 92, 92))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(58, 58, 58)
-                .addComponent(btn_cargarLibro)
-                .addGap(29, 29, 29)
-                .addComponent(btn_verPalabra)
-                .addGap(51, 51, 51))
+                .addGap(18, 18, 18)
+                .addComponent(btn_seleccionarLibros)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btn_cargarPalabras)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_verPalabra))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -80,11 +108,12 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_cargarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarLibroActionPerformed
-        JFileChooser selectorArchivo = new JFileChooser();
-        selectorArchivo.setCurrentDirectory(new File("F:\\Mauri\\GitHub\\TP\\Libros [TP Unico TSB 2014]"));
-        selectorArchivo.setFileFilter(new javax.swing.filechooser.FileFilter() {
-            
+    private void btn_seleccionarLibrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_seleccionarLibrosActionPerformed
+        JFileChooser selectorArchivo = new JFileChooser(); //Se declara un Selector de archivos 
+        selectorArchivo.setMultiSelectionEnabled(true); //Se setea el selector de archivos en selección múltiple
+        selectorArchivo.setCurrentDirectory(new File("F:\\Mauri\\GitHub\\TP\\Libros [TP Unico TSB 2014]")); //Se setea el directorio por defecto en el selector de archivos
+        selectorArchivo.setFileFilter(new javax.swing.filechooser.FileFilter() //Filtra todos los archivos que no sean directorios o archivos .txt en el selector de archivos
+        {
             //Los archivos que aparencen en la ventanita
             @Override
             public boolean accept(File f) {
@@ -97,15 +126,59 @@ public class Principal extends javax.swing.JFrame {
             }
 
         });
+
         if (selectorArchivo.showDialog(this, "Abrir") != JFileChooser.CANCEL_OPTION) {
             try {
-                File f = selectorArchivo.getSelectedFile();
-                gestor.cargarPalabras(f);
+                File[] arregloArchivosNuevos = selectorArchivo.getSelectedFiles();
+                ArrayList<File> arregloArchivosViejo = this.listaArchivosSeleccionados;
+                DefaultListModel modeloList = new DefaultListModel();
+                boolean agregar = false; 
+                
+                if (this.listaArchivosSeleccionados.isEmpty()) {
+                    for (File archivo : arregloArchivosNuevos) {
+                        modeloList.addElement(archivo.getName());
+                        this.listaArchivosSeleccionados.add(archivo);
+                    }
+                } else {
+                    for (File archivo : arregloArchivosViejo) {
+                        modeloList.addElement(archivo.getName());
+                    }
+
+                    for (File archivo : arregloArchivosNuevos) {
+                        agregar = true;
+                        
+                        for (File archivoLista : arregloArchivosViejo) {
+                            if (archivoLista.getAbsolutePath().equals(archivo.getAbsolutePath())) {  
+                                agregar = false;
+                                break;                                
+                            }
+                        }
+                        
+                        if (agregar){
+                            modeloList.addElement(archivo.getName());
+                            this.listaArchivosSeleccionados.add(archivo);
+                        }
+                    }
+                }
+                
+                listaLibros.setModel(modeloList);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                
             }
         }
-    }//GEN-LAST:event_btn_cargarLibroActionPerformed
+    }//GEN-LAST:event_btn_seleccionarLibrosActionPerformed
+
+    private void btn_verPalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_verPalabraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_verPalabraActionPerformed
+
+    private void btn_cargarPalabrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarPalabrasActionPerformed
+        if (listaArchivosSeleccionados.size() != 0){
+            gestor.cargarPalabras(this.listaArchivosSeleccionados);
+        }
+        this.listaLibros.setModel(new DefaultListModel());
+    }//GEN-LAST:event_btn_cargarPalabrasActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -140,11 +213,15 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private Gestor gestor;
+    private ArrayList<File> listaArchivosSeleccionados;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_cargarLibro;
+    private javax.swing.JButton btn_cargarPalabras;
+    private javax.swing.JButton btn_seleccionarLibros;
     private javax.swing.JButton btn_verPalabra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList listaLibros;
     // End of variables declaration//GEN-END:variables
 
 }
