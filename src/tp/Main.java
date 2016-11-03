@@ -9,6 +9,7 @@ public class Main {
         
         interfaz.Principal P = new interfaz.Principal();
         P.setVisible(true);
+        
     }
     
 }

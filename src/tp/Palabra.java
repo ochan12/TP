@@ -49,5 +49,13 @@ public class Palabra implements Comparable<Palabra>{
     {
         if(libro != null) libros.add(libro);
     }
+
+    @Override
+    public String toString() {
+        return "Palabra{" + "contenido=" + contenido + ", contador=" + contador + ", libros=" + libros + '}';
+    }
+    
+    
+    
     
 }

@@ -69,5 +69,9 @@ public class Libro implements Comparable<Libro> {
         return 1;
     }
     
+    public String toString()
+    {
+        return "Autor: " + autor + " - Título: " + titulo +  " - Fecha de lanzamiento: " + fechaLanzamiento + " - Idioma: " + idioma;
+    }    
     
 }

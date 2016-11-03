@@ -2,7 +2,12 @@ package tp;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import static java.util.Objects.hash;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -28,25 +33,43 @@ public class Gestor
             try {
                 BufferedReader lector = new BufferedReader(new InputStreamReader(new FileInputStream(archivo), "8859_1")); //Genera el lector del archivo .txt con codificacion 
                 
-                               
-                for (Libro libro : librosCargados) {
-                    if (libro.compareTo(this.tomarDatosLibros(lector)) == 0) {
+                Libro nuevoLibro = this.tomarDatosLibros(lector);
+                for (Libro libro : librosCargados)
+                {
+                    if (libro.compareTo(nuevoLibro) == 0)
                         return;
-                    }
                 }
-                Libro nuevoLibro = this.tomarDatosLibros(lector); 
                 librosCargados.add(nuevoLibro);
+                
+                String tituloNuevoLibro = lector.readLine();
+                    
+                
+                while(true){
+                    if(tituloNuevoLibro.replaceAll(" ","").equalsIgnoreCase(nuevoLibro.getTitulo().replaceAll(" ", ""))){
+                        break;
+                    }
+                    
+                    tituloNuevoLibro = lector.readLine();
+                }
+                
                 this.cargarPalabrasEnHash(lector);
+                System.out.println(nuevoLibro.toString());                
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        System.out.println("size: "+ hashTable.size());
-        for (int i = 0; i < "zzzzzzzzzzzz".hashCode(); i++) {
-            if(hashTable.get(i)!=null)
-            System.out.println(hashTable.get(i).getContenido() + " " + hashTable.get(i).getContador());
-        }
+        
+        /*
+        RECORRER !!!
+        Enumeration e = hashTable.keys();
+        Object clave;
+        Object valor;
+        while (e.hasMoreElements()) {
+            clave = e.nextElement();
+            valor = hashTable.get(clave);
+            System.out.println("Clave : " + clave + " - Valor : " + valor.toString());
+        }*/
     }
     
     //Comprueba que la palabra no contenga ninguno de estos caracteres: @(arroba),0,1,2,3,4,5,6,7,8,9
@@ -62,23 +85,22 @@ public class Gestor
     }  
     
     private Libro tomarDatosLibros(BufferedReader lector)
-    {
-        
+    {        
         StringBuffer titulo = new StringBuffer();
         StringBuffer autor = new StringBuffer();
         StringBuffer fecha = new StringBuffer();
         StringBuffer lenguaje = new StringBuffer();
         String[] palabras;
-        
+        boolean f = false;
         try
         {
             String linea = lector.readLine();
             
-            while (!linea.contains(titulo.toString()))
+            while (!f)
             {
                 if (linea.contains("Title:")) {
-                    palabras = linea.split(" ");
-
+                    
+                    palabras = linea.split(" ");                    
                     for (String palabra : palabras) {
                         if (!palabra.contains(":")) {
                             titulo.append(palabra.toLowerCase() + " ");
@@ -97,8 +119,8 @@ public class Gestor
                 } 
                 
                 else if (linea.contains("Language:")) {
-                    palabras = linea.split(" ");
-
+                    palabras = linea.split(" "); 
+                    f = true;
                     for (String palabra : palabras) {
                         if (!palabra.contains(":")) {
                             lenguaje.append(palabra.toLowerCase() + " ");
@@ -108,7 +130,7 @@ public class Gestor
                 
                 else if (linea.contains("Release Date:")) {
                     palabras = linea.split(" ");
-
+                    
                     for (String palabra : palabras) {
                         if (!palabra.contains(":") && !palabra.contains("[") && !palabra.contains("]") && !palabra.contains("Release") ) {
                             fecha.append(palabra.toLowerCase() + " ");
@@ -116,8 +138,8 @@ public class Gestor
                     }
                 }
                 linea = lector.readLine();
-            }
-        }      
+            }           
+        }     
         
         catch(Exception e)
         {
@@ -160,9 +182,4 @@ public class Gestor
             System.out.println(ex.getMessage());
         }
     }
-
-        
-
-
-
 }

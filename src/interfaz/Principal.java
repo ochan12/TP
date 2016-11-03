@@ -178,6 +178,7 @@ public class Principal extends javax.swing.JFrame {
             gestor.cargarPalabras(this.listaArchivosSeleccionados);
         }
         this.listaLibros.setModel(new DefaultListModel());
+        this.listaArchivosSeleccionados.clear();
     }//GEN-LAST:event_btn_cargarPalabrasActionPerformed
 
     public static void main(String args[]) {
