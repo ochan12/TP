@@ -10,8 +10,9 @@ import java.util.Map.Entry;
 import static java.util.Objects.hash;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import tp.*;
+
 
 public class Gestor
 {
@@ -52,7 +53,7 @@ public class Gestor
                     tituloNuevoLibro = lector.readLine();
                 }
                 
-                this.cargarPalabrasEnHash(lector);
+                this.cargarPalabrasEnHash(lector, nuevoLibro);
                 System.out.println(nuevoLibro.toString());                
 
             } catch (Exception e) {
@@ -60,16 +61,7 @@ public class Gestor
             }
         }
         
-        /*
-        RECORRER !!!
-        Enumeration e = hashTable.keys();
-        Object clave;
-        Object valor;
-        while (e.hasMoreElements()) {
-            clave = e.nextElement();
-            valor = hashTable.get(clave);
-            System.out.println("Clave : " + clave + " - Valor : " + valor.toString());
-        }*/
+        
     }
     
     //Comprueba que la palabra no contenga ninguno de estos caracteres: @(arroba),0,1,2,3,4,5,6,7,8,9
@@ -78,7 +70,7 @@ public class Gestor
         String[] caracterNoValido = {"@","0","1","2","3","4","5","6","7","8","9","="};
         for(String caracter : caracterNoValido)
         {
-            if(palabra.contains(caracter))
+            if(palabra.contains(caracter)||palabra.isEmpty())
                 return false;
         }
         return true;
@@ -149,7 +141,7 @@ public class Gestor
         return new Libro(autor.toString(),titulo.toString(),fecha.toString(), lenguaje.toString());
     }
 
-    private void cargarPalabrasEnHash(BufferedReader lector) {
+    private void cargarPalabrasEnHash(BufferedReader lector, Libro libro) {
 
         try {
             String[] palabras = null;
@@ -170,9 +162,10 @@ public class Gestor
                         //Si la palabra existe sumamos el contador
                         if (!hashTable.isEmpty() && hashTable.containsKey(palabra.hashCode())) {
                             hashTable.get(Math.abs(palabra.hashCode())).sumarContador();
+                            hashTable.get(Math.abs(palabra.hashCode())).agregarLibro(libro);
                         } //De estar vacía la tabla o de no encontrarse la palabra simplemente se inserta una nueva palabra
                         else {
-                            hashTable.put(Math.abs(palabra.hashCode()), new Palabra(palabra));
+                            hashTable.put(Math.abs(palabra.hashCode()), new Palabra(palabra, libro));
                         }
                     }
                 }
@@ -182,4 +175,27 @@ public class Gestor
             System.out.println(ex.getMessage());
         }
     }
+    
+    public void visualizarPalabras(){
+        interfaz.VentanaVerPalabras ventanaPalabras = new interfaz.VentanaVerPalabras();
+        String[] modelo = {"Palabra","Repeticiones","Libros"};        
+        Object[][] matrizLibros = new Object[this.hashTable.size()][3];
+        
+        //Recorrer la hashTable y almacenando los objetos en una matriz para setear el modelo de la JLIST
+        Enumeration e = hashTable.keys();
+        int clave;
+        Palabra valor;
+        int i = 0;
+        //Aca se va a ir llenando la matriz con los valores que tiene la hashTable, para llenar la tabla
+        while (i<this.hashTable.size()) {
+            clave = (Integer)e.nextElement();//Se busca la clave hash
+            valor = hashTable.get(clave);//Se busca la Palabra en esa posicion hash
+            Object[] libro = {valor.getContenido(),valor.getContador(),valor.librosDondeSeEncuentra()};
+            matrizLibros[i] = libro;//A cada fila de la matriz le corresponde el libro anterior
+            i++;
+        }
+        ventanaPalabras.setModeloTabla(modelo, matrizLibros);
+        ventanaPalabras.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ventanaPalabras.setVisible(true);
+    };
 }

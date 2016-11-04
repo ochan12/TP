@@ -5,6 +5,10 @@
  */
 package interfaz;
 
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+
 /**
  *
  * @author a6
@@ -16,6 +20,8 @@ public class VentanaVerPalabras extends javax.swing.JFrame {
      */
     public VentanaVerPalabras() {
         initComponents();
+        
+        
     }
 
     /**
@@ -28,13 +34,13 @@ public class VentanaVerPalabras extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaPalabras = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaPalabras.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -45,7 +51,7 @@ public class VentanaVerPalabras extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaPalabras);
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,14 +125,20 @@ public class VentanaVerPalabras extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VentanaVerPalabras().setVisible(true);
+                
             }
         });
     }
-
+    
+    public void setModeloTabla(String [] modelo, Object[][] lista){
+        //Modelador que depende directamente de la HashTable
+        tablaPalabras.setModel( new DefaultTableModel(lista,modelo));
+    }
+    private tp.Gestor gestor;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tablaPalabras;
     // End of variables declaration//GEN-END:variables
 }

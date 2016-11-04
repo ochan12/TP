@@ -13,8 +13,22 @@ public class Palabra implements Comparable<Palabra>{
     {
         contenido = s;
         contador = 1;
-        libros = new ArrayList <Libro> ();
+        libros = new ArrayList <> ();
     }
+    
+    public Palabra(String s, Libro libroNuevo)
+    {
+        contenido = s;
+        contador = 1;
+        if(libros==null){
+             libros = new ArrayList <> ();
+             
+        }
+        libros.add(libroNuevo);
+        
+    }
+    
+    
     
     //Sumador
     public void sumarContador()
@@ -47,15 +61,36 @@ public class Palabra implements Comparable<Palabra>{
     //Añade un libro al arraylist
     public void addLibro(Libro libro)
     {
-        if(libro != null) libros.add(libro);
+        if(libro != null) getLibros().add(libro);
     }
 
     @Override
     public String toString() {
-        return "Palabra{" + "contenido=" + contenido + ", contador=" + contador + ", libros=" + libros + '}';
+        return "Palabra{" + "contenido=" + contenido + ", contador=" + contador + ", libros=" + getLibros() + '}';
+    }
+
+    public ArrayList <Libro> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(ArrayList <Libro> libros) {
+        this.libros = libros;
     }
     
+    public String librosDondeSeEncuentra(){
+        StringBuilder s = new StringBuilder();
+        for (Libro libro : libros) {
+            s.append(libro.getTitulo()+" - ");
+        }
+        s.delete(s.length()-2, s.length()-1);
+        return s.toString();
+    }
     
-    
+    public void agregarLibro(Libro libroNuevo){
+        for (Libro libro : libros) {
+           if(libro.getTitulo().equalsIgnoreCase(libroNuevo.getTitulo())) return;
+        }
+        this.libros.add(libroNuevo);
+    }
     
 }

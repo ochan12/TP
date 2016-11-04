@@ -170,7 +170,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_seleccionarLibrosActionPerformed
 
     private void btn_verPalabraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_verPalabraActionPerformed
-        // TODO add your handling code here:
+        gestor.visualizarPalabras();
     }//GEN-LAST:event_btn_verPalabraActionPerformed
 
     private void btn_cargarPalabrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarPalabrasActionPerformed
