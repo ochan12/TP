@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Mauri/GitHub/TP/src/interfaz/Principal.java</file>
-            <file>file:/F:/Mauri/GitHub/TP/src/tp/Main.java</file>
-            <file>file:/F:/Mauri/GitHub/TP/src/tp/Gestor.java</file>
+            <file>file:/C:/Mateo/Facu/TSB/TP/TP/src/interfaz/VentanaVerPalabras.java</file>
+            <file>file:/C:/Mateo/Facu/TSB/TP/TP/src/tp/Palabra.java</file>
+            <file>file:/C:/Mateo/Facu/TSB/TP/TP/src/interfaz/Principal.java</file>
+            <file>file:/C:/Mateo/Facu/TSB/TP/TP/src/tp/Gestor.java</file>
+            <file>file:/C:/Mateo/Facu/TSB/TP/TP/src/tp/Libro.java</file>
         </group>
     </open-files>
 </project-private>
