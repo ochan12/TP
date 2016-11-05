@@ -1,6 +1,7 @@
 package tp;
 
 import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
 
 public class Palabra implements Comparable<Palabra>{
     
@@ -77,13 +78,9 @@ public class Palabra implements Comparable<Palabra>{
         this.libros = libros;
     }
     
-    public String librosDondeSeEncuentra(){
-        StringBuilder s = new StringBuilder();
-        for (Libro libro : libros) {
-            s.append(libro.getTitulo()+" - ");
-        }
-        s.delete(s.length()-2, s.length()-1);
-        return s.toString();
+    public int librosDondeSeEncuentra(){
+        
+        return libros.size();
     }
     
     public void agregarLibro(Libro libroNuevo){
