@@ -29,6 +29,11 @@ public class Palabra implements Comparable<Palabra>{
         
     }
     
+    public Palabra(String contenido, int contador){
+        this.contador= contador;
+        this.contenido = contenido;
+    }
+    
     
     
     //Sumador
@@ -79,7 +84,7 @@ public class Palabra implements Comparable<Palabra>{
     }
     
     public int librosDondeSeEncuentra(){
-        
+        if(libros==null)return 0;
         return libros.size();
     }
     

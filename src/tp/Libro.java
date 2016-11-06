@@ -3,20 +3,17 @@ package tp;
 public class Libro implements Comparable<Libro> {
     private String autor;
     private String titulo;
-    private String fechaLanzamiento;
     private String idioma;
     
     //Constructor
     public Libro (){
          autor = "";
          titulo = "";
-         fechaLanzamiento = "";
          idioma = "";
     }
-    public Libro(String autor, String titulo, String fechaLanzamiento, String idioma){
+    public Libro(String autor, String titulo, String idioma){
         this.autor = autor;
         this.titulo = titulo;
-        this.fechaLanzamiento = fechaLanzamiento;
         this.idioma = idioma;
         
     }
@@ -41,16 +38,7 @@ public class Libro implements Comparable<Libro> {
         this.titulo = titulo;
     }
 
-    public String getFechaLanzamiento()
-    {
-        return fechaLanzamiento;
-    }
-
-    public void setFechaLanzamiento(String fechaLanzamiento)
-    {
-        this.fechaLanzamiento = fechaLanzamiento;
-    }
-
+    
     public String getIdioma()
     {
         return idioma;
@@ -71,7 +59,7 @@ public class Libro implements Comparable<Libro> {
     
     public String toString()
     {
-        return "Autor: " + autor + " - Título: " + titulo +  " - Fecha de lanzamiento: " + fechaLanzamiento + " - Idioma: " + idioma;
+        return "Autor: " + autor + " - Título: " + titulo +  " - Idioma: " + idioma;
     }    
     
 }
