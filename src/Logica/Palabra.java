@@ -86,7 +86,7 @@ public class Palabra implements Comparable<Palabra>{
         boolean agregar = true;
 
         try {
-            if (libros != null) {
+            if (libros != null && libroNuevo != null) {
                 for (Libro libro : libros) {
                     if (libro.compareTo(libroNuevo) == 0) {
                         agregar = false;

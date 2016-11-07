@@ -1,23 +1,12 @@
 package Logica;
 
-import Persistencia.Conexion;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import static java.util.Objects.hash;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import java.sql.*;
-import java.util.LinkedList;
-import javax.swing.SwingUtilities;
 
 public class Gestor {
 
@@ -33,13 +22,14 @@ public class Gestor {
         librosCargados = new ArrayList<Libro>();
         accesoBD = new Persistencia.AccesoBD();
     }
+
     public void cargarPalabras() {
 
         try {
             //CARGAR PALABRAS
             String busqueda = "Select * FROM PALABRAS";
             ArrayList<String> palabras[] = accesoBD.query(busqueda);
-            
+
             if (palabras[0].size() != 0) {
                 for (int i = 0; i < palabras[0].size(); i++) {
                     String palabraAgregar = palabras[0].get(i);
@@ -49,25 +39,15 @@ public class Gestor {
 
                 busqueda = "SELECT * FROM PALABRAxLIBRO PL JOIN LIBROS L ON PL.ID_LIBRO = L.ID_LIBRO";
                 ArrayList<String> palabrasXlibro[] = accesoBD.query(busqueda);
-                
-                //System.out.println(""+ palabrasXlibro[0].toString());
-                //System.out.println(""+ palabrasXlibro[1].toString());
-                //System.out.println(""+ palabrasXlibro[2].toString());
-                //System.out.println(""+ palabrasXlibro[3].toString());
-                //System.out.println(""+ palabrasXlibro[4].toString());
-                //System.out.println(""+ palabrasXlibro[5].toString());
-                
+
                 for (int i = 0; i < palabrasXlibro[0].size(); i++) {
                     String nombreLibro = palabrasXlibro[3].get(i);
                     String autorLibro = palabrasXlibro[4].get(i);
                     String lenguajeLibro = palabrasXlibro[5].get(i);
                     Libro libroNuevo = new Libro(autorLibro, nombreLibro, lenguajeLibro);
-                    
-                    //System.out.println(""+ palabrasXlibro[1].get(i));
-                    
+
                     hashTable.get(palabrasXlibro[1].get(i).hashCode()).agregarLibro(libroNuevo);
-                    
-                    
+
                     if (!existeLibro(libroNuevo)) {
                         librosCargados.add(libroNuevo);
                     }
@@ -91,60 +71,52 @@ public class Gestor {
                 valor = hashTable.get(clave);//Se busca la Palabra en esa posicion hash
                 select = "SELECT * FROM PALABRAS WHERE CONTENIDO_PALABRA = '" + valor.getContenido() + "'";
                 ArrayList<String> busqueda[] = accesoBD.query(select);
-                
-                
+
                 if (busqueda[0].size() == 0) {
                     insert = "INSERT INTO PALABRAS VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
                     accesoBD.noQuery(insert);
-                    
+
                     for (Libro libro : valor.getLibros()) {
                         select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
                         ArrayList<String> esteLibro[] = accesoBD.query(select);
-                        
+
                         if (esteLibro[0].size() == 0) {
-                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('"+libro.getTitulo()+"', '"+libro.getAutor()+"', '"+libro.getIdioma()+"')";
+                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
                             accesoBD.noQuery(insert);
                         }
-                        
-                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '"+libro.getTitulo()+"' and AUTOR_LIBRO = '"+libro.getAutor()+"'";
+
+                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' and AUTOR_LIBRO = '" + libro.getAutor() + "'";
                         esteLibro = accesoBD.query(select);
-                        
-                        
-                        System.out.println(" PALABRA +"+ valor.getContenido() + esteLibro[0].toString() + esteLibro[1].toString());
-                        
+
+
                         insert = "INSERT INTO PALABRAXLIBRO VALUES (" + esteLibro[0].get(0) + ", '" + valor.getContenido() + "')";
                         accesoBD.noQuery(insert);
-                        System.out.println("entro al for");
-                    
-                        }
+
+                    }
                 } else {
                     update = "UPDATE PALABRAS SET CONTADOR_PALABRA = " + valor.getContador();
                     accesoBD.noQuery(update);
-                    
+
                     for (Libro libro : valor.getLibros()) {
-                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '"+libro.getTitulo()+"' AND AUTOR_LIBRO = '"+ libro.getAutor()+"'";
+                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
                         ArrayList<String> esteLibro[] = accesoBD.query(select);
                         if (esteLibro[0].size() == 0) {
-                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('"+libro.getTitulo()+"', '"+libro.getAutor()+"', '"+libro.getIdioma()+"')";
+                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
                             accesoBD.noQuery(insert);
-                            insert = "INSERT INTO PALABRAXLIBRO VALUES ("+esteLibro[0].get(0)+", '"+valor.getContenido()+"')";
+                            insert = "INSERT INTO PALABRAXLIBRO VALUES (" + esteLibro[0].get(0) + ", '" + valor.getContenido() + "')";
                             accesoBD.noQuery(insert);
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            System.out.println("ERROR GUARDAR PALABRA: "+e.getMessage());
+            System.out.println("ERROR GUARDAR PALABRA: " + e.getMessage());
         }
 
     }
-        
+
     public void cargarPalabras(ArrayList<File> listaArchivo) {
         for (File archivo : listaArchivo) {
-            /*if (!archivo.getName().endsWith(".txt")) //Revisamos que el archivo sea .txt
-             {
-             return;
-             }*/
             try {
 
                 Libro nuevoLibro = this.tomarDatosLibros(archivo);
@@ -228,22 +200,22 @@ public class Gestor {
 
         return new Libro(autor.toString(), titulo.toString(), lenguaje.toString());
     }
-    
+
     private void cargarPalabrasEnHash(File archivo, Libro libro) {
         int progresoBarra = 1;
-        
-        Interfaz.BarraProgreso barraActual = this.mostrarBarraProgreso(archivo, libro.getTitulo());                                   
+
+        Interfaz.BarraProgreso barraActual = this.mostrarBarraProgreso(archivo, libro.getTitulo());
         barraActual.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         barraActual.setVisible(true);
-                 
+
         try {
             BufferedReader lector = new BufferedReader(new InputStreamReader(new FileInputStream(archivo), "8859_1"));
             String[] palabras = null;
             String delimitadores = "[ _.,;:?!¡«»¿\\'\\\"\\\\[\\[]\\]()~#*/-]+";
-            
+
             String linea = lector.readLine(); //Lee una linea de texto del archivo
             while (linea != null) //Un ciclo para "linea" no nulo
-            {                
+            {
                 palabras = linea.split(delimitadores); //Dividimos las palabras de "linea" por los delimitadores, y lo almacenamos en "palabras"
                 for (String palabra : palabras) //Ciclo que recorre todas las palabras obtenidas anteriormente
                 {
@@ -261,7 +233,7 @@ public class Gestor {
                             hashTable.put(Math.abs(palabra.hashCode()), new Palabra(palabra, libro));
                         }
                     }
-                }      
+                }
                 barraActual.actualizarBarraProgreso(progresoBarra);
                 progresoBarra++;
                 linea = lector.readLine();

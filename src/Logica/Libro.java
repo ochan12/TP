@@ -51,7 +51,7 @@ public class Libro implements Comparable<Libro> {
 
     @Override
     public int compareTo(Libro comparable) {
-        if (this.getAutor().equalsIgnoreCase(comparable.getAutor()) && this.getTitulo().equalsIgnoreCase(comparable.getAutor())) {
+        if (this.getAutor().equalsIgnoreCase(comparable.getAutor()) && this.getTitulo().equalsIgnoreCase(comparable.getTitulo())) {
             return 0;
         }
         return 1;
