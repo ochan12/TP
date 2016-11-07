@@ -1,5 +1,6 @@
 package Logica;
 
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Main {
@@ -13,24 +14,7 @@ public class Main {
         
         Interfaz.Principal P = new Interfaz.Principal();
         P.setVisible(true);
-        
-        /* 
-        String a = "gilafa";
-        
-        try{
-            
-            String insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('"+a+"', '"+a+"', '"+a+"')";
-            acceso.noQuery(insert);
 
-            String select = ("SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '"+a+"' and AUTOR_LIBRO =  '"+a+"'");
-
-            ArrayList<String> esteLibro[] = acceso.query(select);
-
-            System.out.println("SEGUNDO INSERT +" + esteLibro[1].toString());
-            
-        }catch(Exception e){
-            System.out.println(""+ e.getMessage());
-        }
 
         
         

@@ -4,6 +4,7 @@ public class Libro implements Comparable<Libro> {
     private String autor;
     private String titulo;
     private String idioma;
+    private int id;
     
     //Constructor
     public Libro (){
@@ -15,7 +16,6 @@ public class Libro implements Comparable<Libro> {
         this.autor = autor;
         this.titulo = titulo;
         this.idioma = idioma;
-        
     }
     //Seters y Geters
     public String getAutor()
@@ -26,6 +26,14 @@ public class Libro implements Comparable<Libro> {
     public void setAutor(String autor)
     {
         this.autor = autor;
+    }
+    
+    public int getID(){
+        return id;
+    }
+    
+    public void setID(int id){
+        this.id = id;
     }
 
     public String getTitulo()

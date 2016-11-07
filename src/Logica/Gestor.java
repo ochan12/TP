@@ -49,6 +49,7 @@ public class Gestor {
                     hashTable.get(palabrasXlibro[1].get(i).hashCode()).agregarLibro(libroNuevo);
 
                     if (!existeLibro(libroNuevo)) {
+                        libroNuevo.setID(librosCargados.size());
                         librosCargados.add(libroNuevo);
                     }
                 }
@@ -76,20 +77,17 @@ public class Gestor {
                     insert = "INSERT INTO PALABRAS VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
                     accesoBD.noQuery(insert);
 
+                    
                     for (Libro libro : valor.getLibros()) {
                         select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
                         ArrayList<String> esteLibro[] = accesoBD.query(select);
 
                         if (esteLibro[0].size() == 0) {
-                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
+                            insert = "INSERT INTO LIBROS (ID_LIBRO, NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ("+ libro.getID() +", '" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
                             accesoBD.noQuery(insert);
                         }
 
-                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' and AUTOR_LIBRO = '" + libro.getAutor() + "'";
-                        esteLibro = accesoBD.query(select);
-
-
-                        insert = "INSERT INTO PALABRAXLIBRO VALUES (" + esteLibro[0].get(0) + ", '" + valor.getContenido() + "')";
+                        insert = "INSERT INTO PALABRAXLIBRO VALUES (" + libro.getID() + ", '" + valor.getContenido() + "')";
                         accesoBD.noQuery(insert);
 
                     }
@@ -101,9 +99,7 @@ public class Gestor {
                         select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
                         ArrayList<String> esteLibro[] = accesoBD.query(select);
                         if (esteLibro[0].size() == 0) {
-                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
-                            accesoBD.noQuery(insert);
-                            insert = "INSERT INTO PALABRAXLIBRO VALUES (" + esteLibro[0].get(0) + ", '" + valor.getContenido() + "')";
+                            insert = "INSERT INTO PALABRAXLIBRO VALUES (" + libro.getID() + ", '" + valor.getContenido() + "')";
                             accesoBD.noQuery(insert);
                         }
                     }
@@ -118,21 +114,19 @@ public class Gestor {
     public void cargarPalabras(ArrayList<File> listaArchivo) {
         for (File archivo : listaArchivo) {
             try {
-
+                
                 Libro nuevoLibro = this.tomarDatosLibros(archivo);
-
-                if (existeLibro(nuevoLibro)) {
-                    return;
+                
+                if (!existeLibro(nuevoLibro)) {
+                    nuevoLibro.setID(librosCargados.size());
+                    librosCargados.add(nuevoLibro);
+                    this.cargarPalabrasEnHash(archivo, nuevoLibro);
                 }
-                librosCargados.add(nuevoLibro);
-
-                this.cargarPalabrasEnHash(archivo, nuevoLibro);
-
+                
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        }
-
+        }        
     }
 
     //Comprueba que la palabra no contenga ninguno de estos caracteres: @(arroba),0,1,2,3,4,5,6,7,8,9
@@ -226,11 +220,11 @@ public class Gestor {
                         //Verificamos que la tabla no esté vacía, en caso de no estarlo buscamos si la palabra a ser ingresada existe o no
                         //Si la palabra existe sumamos el contador
                         if (!hashTable.isEmpty() && hashTable.containsKey(palabra.hashCode())) {
-                            hashTable.get(Math.abs(palabra.hashCode())).sumarContador();
-                            hashTable.get(Math.abs(palabra.hashCode())).agregarLibro(libro);
+                            hashTable.get(palabra.hashCode()).sumarContador();
+                            hashTable.get(palabra.hashCode()).agregarLibro(libro);
                         } //De estar vacía la tabla o de no encontrarse la palabra simplemente se inserta una nueva palabra
                         else {
-                            hashTable.put(Math.abs(palabra.hashCode()), new Palabra(palabra, libro));
+                            hashTable.put(palabra.hashCode(), new Palabra(palabra, libro));
                         }
                     }
                 }
