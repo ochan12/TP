@@ -1,23 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Interfaz;
 
-import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-
-/**
- *
- * @author Ochan12
- */
 public class BarraProgreso extends javax.swing.JFrame  {
 
-    /**
-     * Creates new form BarraProgreso
-     */
     public BarraProgreso() {
         initComponents();
     }
@@ -91,19 +75,19 @@ public class BarraProgreso extends javax.swing.JFrame  {
         });
     }
     
-    public void crearBarra(int cantidadLineas){
-        bp_barra = new JProgressBar(0,cantidadLineas);
+    public void crearBarra(int cantidadLineas, String tituloLibro){
+        this.setTitle("Cargando: " + tituloLibro.toUpperCase());
+        bp_barra.setMinimum(0);
+        bp_barra.setMaximum(cantidadLineas);
         bp_barra.setValue(0);
         bp_barra.setVisible(true);
+    }
         
-    }
+    public void actualizarBarraProgreso(final int progresoBarra) throws Exception {
+        bp_barra.setValue(progresoBarra);
+        bp_barra.repaint();        
+    }    
     
-    public void actualizarBarraProgreso() throws Exception{        
-       bp_barra.setValue(bp_barra.getValue()+1);        
-    }
-    
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar bp_barra;
     // End of variables declaration//GEN-END:variables

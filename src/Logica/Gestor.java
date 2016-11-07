@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import java.util.LinkedList;
+import javax.swing.SwingUtilities;
 
 public class Gestor {
 
@@ -112,7 +113,7 @@ public class Gestor {
         }
 
     }*/
-
+        
     public void cargarPalabras(ArrayList<File> listaArchivo) {
         for (File archivo : listaArchivo) {
             /*if (!archivo.getName().endsWith(".txt")) //Revisamos que el archivo sea .txt
@@ -203,20 +204,22 @@ public class Gestor {
 
         return new Libro(autor.toString(), titulo.toString(), lenguaje.toString());
     }
-
+    
     private void cargarPalabrasEnHash(File archivo, Libro libro) {
-
+        int progresoBarra = 1;
+        
+        Interfaz.BarraProgreso barraActual = this.mostrarBarraProgreso(archivo, libro.getTitulo());                                   
+        barraActual.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        barraActual.setVisible(true);
+                 
         try {
             BufferedReader lector = new BufferedReader(new InputStreamReader(new FileInputStream(archivo), "8859_1"));
             String[] palabras = null;
             String delimitadores = "[ _.,;:?!¡«»¿\\'\\\"\\\\[\\[]\\]()~#*/-]+";
-
-            Interfaz.BarraProgreso barraActual = this.mostrarBarraProgreso(archivo);
-            barraActual.setVisible(false);
+            
             String linea = lector.readLine(); //Lee una linea de texto del archivo
-            System.out.println(linea);
             while (linea != null) //Un ciclo para "linea" no nulo
-            {
+            {                
                 palabras = linea.split(delimitadores); //Dividimos las palabras de "linea" por los delimitadores, y lo almacenamos en "palabras"
                 for (String palabra : palabras) //Ciclo que recorre todas las palabras obtenidas anteriormente
                 {
@@ -234,21 +237,19 @@ public class Gestor {
                             hashTable.put(Math.abs(palabra.hashCode()), new Palabra(palabra, libro));
                         }
                     }
-                }
-
-                barraActual.actualizarBarraProgreso();
-
+                }      
+                barraActual.actualizarBarraProgreso(progresoBarra);
+                progresoBarra++;
                 linea = lector.readLine();
-
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        barraActual.dispose();
     }
 
     private int calcularCantidadLineas(File archivo) {
         int cantidadLineas = 0;
-
         try {
             BufferedReader lector = new BufferedReader(new InputStreamReader(new FileInputStream(archivo), "8859_1"));
             String linea = lector.readLine();
@@ -259,13 +260,12 @@ public class Gestor {
         } catch (IOException ex) {
             Logger.getLogger(Gestor.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return cantidadLineas;
     }
 
-    private Interfaz.BarraProgreso mostrarBarraProgreso(File archivo) {
+    private Interfaz.BarraProgreso mostrarBarraProgreso(File archivo, String tituloLibro) {
         Interfaz.BarraProgreso barra = new Interfaz.BarraProgreso();
-        barra.crearBarra(this.calcularCantidadLineas(archivo));
+        barra.crearBarra(this.calcularCantidadLineas(archivo), tituloLibro);
         barra.setVisible(true);
         return barra;
     }

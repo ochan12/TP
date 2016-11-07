@@ -190,13 +190,19 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_verPalabraActionPerformed
 
     private void btn_cargarPalabrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarPalabrasActionPerformed
-        if (listaArchivosSeleccionados.size() != 0){
-            gestor.cargarPalabras(this.listaArchivosSeleccionados);
-        }
-        this.listaLibros.setModel(new DefaultListModel());
-        this.listaArchivosSeleccionados.clear();
+        Runnable corredor = new Runnable() {
+            public void run() {
+                if (listaArchivosSeleccionados.size() != 0) {
+                    gestor.cargarPalabras(listaArchivosSeleccionados);
+                }
+                listaLibros.setModel(new DefaultListModel());
+                listaArchivosSeleccionados.clear();
+            }
+        };
+        Thread nuevoHilo = new Thread(corredor, "Code Executer");
+        nuevoHilo.start();
     }//GEN-LAST:event_btn_cargarPalabrasActionPerformed
-
+   
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
        // gestor.guardarPalabras();
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -14,17 +14,17 @@ public class Main {
     {
 
         
-            //Interfaz.Principal P = new Interfaz.Principal();
-            //P.setVisible(true);
+            Interfaz.Principal P = new Interfaz.Principal();
+            P.setVisible(true);
         
-        AccesoBD acceso = new AccesoBD();
-        
-        //acceso.noQuery("INSERT INTO PALABRAS VALUES('el', 3)");
-        
-        ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");
-        
-        System.out.println(""+ arreglo[1].toString());
-        
+//        AccesoBD acceso = new AccesoBD();
+//        
+//        //acceso.noQuery("INSERT INTO PALABRAS VALUES('el', 3)");
+//        
+//        ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");
+//        
+//        System.out.println(""+ arreglo[1].toString());
+//        
        
             
         
