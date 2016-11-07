@@ -13,7 +13,7 @@ public class Palabra implements Comparable<Palabra>{
     {
         contenido = s;
         contador = 1;
-        libros = new ArrayList <> ();
+        libros = new ArrayList();
     }
     
     public Palabra(String s, Libro libroNuevo)
@@ -21,7 +21,7 @@ public class Palabra implements Comparable<Palabra>{
         contenido = s;
         contador = 1;
         if(libros==null){
-             libros = new ArrayList <> ();
+             libros = new ArrayList();
              
         }
         libros.add(libroNuevo);
@@ -31,6 +31,7 @@ public class Palabra implements Comparable<Palabra>{
     public Palabra(String contenido, int contador){
         this.contador= contador;
         this.contenido = contenido;
+        this.libros = new ArrayList();
     }
     
     
@@ -63,12 +64,6 @@ public class Palabra implements Comparable<Palabra>{
         return this.contenido.compareTo(p.contenido);
     }
     
-    //Añade un libro al arraylist
-    public void addLibro(Libro libro)
-    {
-        if(libro != null) getLibros().add(libro);
-    }
-
     @Override
     public String toString() {
         return "Palabra{" + "contenido=" + contenido + ", contador=" + contador + ", libros=" + getLibros() + '}';
@@ -87,11 +82,24 @@ public class Palabra implements Comparable<Palabra>{
         return libros.size();
     }
     
-    public void agregarLibro(Libro libroNuevo){
-        for (Libro libro : libros) {
-           if(libro.getTitulo().equalsIgnoreCase(libroNuevo.getTitulo())) return;
+    public void agregarLibro(Libro libroNuevo) {
+        boolean agregar = true;
+
+        try {
+            if (libros != null) {
+                for (Libro libro : libros) {
+                    if (libro.compareTo(libroNuevo) == 0) {
+                        agregar = false;
+                    }
+                }
+            }
+            if (agregar) {
+                this.libros.add(libroNuevo);
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR EN CARGAR LIBRO" + e.getMessage());
         }
-        this.libros.add(libroNuevo);
+
     }
-    
+
 }

@@ -6,10 +6,10 @@ public class Main {
 
     public static void main(String[] args)
     {
-        Persistencia.AccesoBD acceso = new Persistencia.AccesoBD();
-        acceso.noQuery("DELETE FROM PALABRAxLIBRO");
-        acceso.noQuery("DELETE FROM PALABRAS");
-        acceso.noQuery("DELETE FROM LIBROS");
+        //Persistencia.AccesoBD acceso = new Persistencia.AccesoBD();
+        //acceso.noQuery("DELETE FROM PALABRAxLIBRO");
+        //acceso.noQuery("DELETE FROM PALABRAS");
+        //acceso.noQuery("DELETE FROM LIBROS");
         
         Interfaz.Principal P = new Interfaz.Principal();
         P.setVisible(true);
