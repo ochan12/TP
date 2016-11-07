@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Mon Nov 07 16:45:21 GMT-03:00 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0158-4052-db95-000007eb5130 
+Mon Nov 07 18:42:11 GMT-03:00 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0158-40bd-d048-00000819b250 
 on database directory F:\Mauri\GitHub\TP\DB\Vocabulario.DB with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
 Loaded from file:/F:/Mauri/GitHub/TP/src/Controlador/derby.jar
 java.vendor=Oracle Corporation

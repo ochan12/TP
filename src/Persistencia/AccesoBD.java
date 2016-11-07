@@ -21,12 +21,12 @@ public class AccesoBD {
             ResultSet resultSet = preparedStatement.executeQuery();
             ResultSetMetaData metaData = resultSet.getMetaData();
             int cantidadColumnas = metaData.getColumnCount();
-
+/*
             System.out.println(""+ cantidadColumnas);
             
             for (int i = 0; i < cantidadColumnas; i++) {
                 System.out.println(""+ metaData.getColumnName(i+1));
-            }
+            }*/
             
             retorno = new ArrayList[cantidadColumnas];
             

@@ -1,21 +1,39 @@
 package Logica;
 
+import java.util.ArrayList;
+
 public class Main {
 
     public static void main(String[] args)
     {
-
+        Persistencia.AccesoBD acceso = new Persistencia.AccesoBD();
+        acceso.noQuery("DELETE FROM PALABRAxLIBRO");
+        acceso.noQuery("DELETE FROM PALABRAS");
+        acceso.noQuery("DELETE FROM LIBROS");
         
         Interfaz.Principal P = new Interfaz.Principal();
         P.setVisible(true);
         
-                
-        /*
-        AccesoBD acceso = new AccesoBD();
+        /* 
+        String a = "gilafa";
         
-        acceso.noQuery("DELETE FROM PALABRAxLIBRO");
-        acceso.noQuery("DELETE FROM PALABRAS");
-        acceso.noQuery("DELETE FROM LIBROS");
+        try{
+            
+            String insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('"+a+"', '"+a+"', '"+a+"')";
+            acceso.noQuery(insert);
+
+            String select = ("SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '"+a+"' and AUTOR_LIBRO =  '"+a+"'");
+
+            ArrayList<String> esteLibro[] = acceso.query(select);
+
+            System.out.println("SEGUNDO INSERT +" + esteLibro[1].toString());
+            
+        }catch(Exception e){
+            System.out.println(""+ e.getMessage());
+        }
+
+        
+        
         //acceso.noQuery("INSERT INTO PALABRAS VALUES('el', 3)");
         /*
         ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");

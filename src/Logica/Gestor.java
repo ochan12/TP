@@ -54,19 +54,16 @@ public class Gestor {
                 busqueda = "SELECT * FROM PALABRAxLIBRO PL JOIN LIBROS L ON PL.ID_LIBRO = L.ID_LIBRO";
                 ArrayList<String> palabrasXlibro[] = accesoBD.query(busqueda);
  
-                System.out.println("O1 + " +palabrasXlibro[0].size());
                 
                 for (int i = 0; i < palabrasXlibro[0].size(); i++) {
                     String nombreLibro = palabrasXlibro[3].get(i);
                     String autorLibro = palabrasXlibro[4].get(i);
                     String lenguajeLibro = palabrasXlibro[5].get(i);
                     Libro libroNuevo = new Libro(autorLibro, nombreLibro, lenguajeLibro);
-                    
-                    System.out.println("O2");                    
+                                      
                     hashTable.get(palabrasXlibro[1].get(i).hashCode()).addLibro(libroNuevo);
                     if (!existeLibro(libroNuevo)) {
                         librosCargados.add(libroNuevo);
-                        System.out.println("O3");
                     }
                 }
 
@@ -91,22 +88,32 @@ public class Gestor {
                 
                 
                 if (busqueda[0].size() == 0) {
-                    System.out.println("palabra no encontrada");
                     insert = "INSERT INTO PALABRAS VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
                     accesoBD.noQuery(insert);
-                
                     
                     for (Libro libro : valor.getLibros()) {
-                        insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getAutor() + "', '" + libro.getTitulo() + "', '" + libro.getIdioma() + "')";
-                        accesoBD.noQuery(insert);
                         select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
                         ArrayList<String> esteLibro[] = accesoBD.query(select);
+                        
+                        if (esteLibro[0].size() == 0) {
+                            insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('"+libro.getTitulo()+"', '"+libro.getAutor()+"', '"+libro.getIdioma()+"')";
+                            accesoBD.noQuery(insert);
+                        }
+                        
+                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '"+libro.getTitulo()+"' and AUTOR_LIBRO = '"+libro.getAutor()+"'";
+                        
+                        esteLibro = accesoBD.query(select);
+                        
+                        System.out.println(" PALABRA +"+ valor.getContenido() + esteLibro[1].toString());
+                        
+                        /*
+                        
                         insert = "INSERT INTO PALABRAXLIBRO VALUES ('" + esteLibro[0].get(0) + "', " + valor.getContenido() + ")";
                         accesoBD.noQuery(insert);
-                        
-                    }
+                        System.out.println("entro al for");
+                    */
+                        }
                 } else {
-                    System.out.println("estaba la palabra");
                     update = "UPDATE PALABRAS SET CONTADOR_PALABRA = " + valor.getContador();
                     accesoBD.noQuery(update);
                     
@@ -124,7 +131,7 @@ public class Gestor {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR GUARDAR PALABRA: "+e.getMessage());
         }
 
     }
@@ -145,7 +152,6 @@ public class Gestor {
                 librosCargados.add(nuevoLibro);
 
                 this.cargarPalabrasEnHash(archivo, nuevoLibro);
-                System.out.println(nuevoLibro.toString());
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
