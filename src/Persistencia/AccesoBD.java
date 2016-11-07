@@ -43,7 +43,7 @@ public class AccesoBD {
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
-            System.out.println("ERROR: CATCH LINEA 36 - " + e.getMessage());
+            System.out.println("ERROR: CATCH LINEA 46 - " + e.getMessage());
         } finally {
             conexion.desconectarBD();
         }
@@ -61,7 +61,7 @@ public class AccesoBD {
             retorno = true;
 
         } catch (SQLException ex) {
-            System.out.println("ERROR LINEA 54 - " + ex.getMessage());
+            System.out.println("ERROR LINEA 64 - " + ex.getMessage());
         } finally {
             conexion.desconectarBD();
         }
