@@ -21,13 +21,13 @@ public class AccesoBD {
             ResultSet resultSet = preparedStatement.executeQuery();
             ResultSetMetaData metaData = resultSet.getMetaData();
             int cantidadColumnas = metaData.getColumnCount();
-/*
+
             System.out.println(""+ cantidadColumnas);
             
-            System.out.println(""+ metaData.getColumnName(1));
+            for (int i = 0; i < cantidadColumnas; i++) {
+                System.out.println(""+ metaData.getColumnName(i+1));
+            }
             
-             System.out.println(""+ metaData.getColumnName(2));
-           */
             retorno = new ArrayList[cantidadColumnas];
             
             for (int i = 0; i < cantidadColumnas; i++) {
@@ -39,7 +39,7 @@ public class AccesoBD {
                    retorno[i].add(resultSet.getString(metaData.getColumnName(i+1)));
                 }
             }
-
+            
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {

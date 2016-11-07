@@ -1,31 +1,38 @@
 package Logica;
 
-import Persistencia.AccesoBD;
-import Persistencia.Conexion;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
-
 public class Main {
 
     public static void main(String[] args)
     {
 
         
-            Interfaz.Principal P = new Interfaz.Principal();
-            P.setVisible(true);
+        Interfaz.Principal P = new Interfaz.Principal();
+        P.setVisible(true);
         
-//        AccesoBD acceso = new AccesoBD();
-//        
-//        //acceso.noQuery("INSERT INTO PALABRAS VALUES('el', 3)");
-//        
-//        ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");
-//        
-//        System.out.println(""+ arreglo[1].toString());
-//        
+                
+        /*
+        AccesoBD acceso = new AccesoBD();
+        
+        acceso.noQuery("DELETE FROM PALABRAxLIBRO");
+        acceso.noQuery("DELETE FROM PALABRAS");
+        acceso.noQuery("DELETE FROM LIBROS");
+        //acceso.noQuery("INSERT INTO PALABRAS VALUES('el', 3)");
+        /*
+        ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");
+        
+        for (int j = 0; j < arreglo[0].size(); j++) {
+            for (int i = 0; i < arreglo.length; i++) {
+                 System.out.print(" " + arreglo[i].get(j).toString());
+            }
+            System.out.println(" ");
+        }
+
+        
+        System.out.println(""+ arreglo[0].toString() + arreglo[1].toString() );
        
+       
+        */
+        
             
         
     }

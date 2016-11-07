@@ -24,51 +24,61 @@ public class Gestor {
     private Interfaz.VentanaVerPalabras ventanaPalabras; //Declaramos la ventana para visualizar la tabla
     private Hashtable<Integer, Palabra> hashTable;
     private ArrayList<Libro> librosCargados;
-    private Conexion accesoBD;
+    private Persistencia.AccesoBD accesoBD;
 
     //Constructor
     public Gestor() {
         ventanaPalabras = new Interfaz.VentanaVerPalabras();
         hashTable = new Hashtable<Integer, Palabra>();
         librosCargados = new ArrayList<Libro>();
-        accesoBD = new Conexion();
+        accesoBD = new Persistencia.AccesoBD();
     }
-/*
     public void cargarPalabras() {
+
         try {
             //CARGAR PALABRAS
-            String busqueda = "Select * FROM PALABRA";
-            ResultSet palabras = accesoBD.query(busqueda);
-            if (palabras == null) {
-                return;
-            }
-            while (palabras.next()) {
-                String palabraAgregar = palabras.getString("NOMBRE_PALABRA");
-                int repeticionesPalabra = palabras.getShort("CANTIDAD_PALABRA");
-                hashTable.put(palabraAgregar.hashCode(), new Palabra(palabraAgregar, repeticionesPalabra));
-            }
-            //Cargar libros y asociarlos a las palabras
-            busqueda = "SELECT * FROM PALABRAXLIBRO PL JOIN LIBRO L ON PL.ID_LIBRO = L.ID_LIBRO";
-            palabras = accesoBD.query(busqueda);
-            while (palabras.next()) {
-                String nombreLibro = palabras.getString("NOMBRE_LIBRO");
-                String autorLibro = palabras.getString("AUTOR_LIBRO");
-                String lenguajeLibro = palabras.getString("LENGUAJE_LIBRO");
-                Libro libroNuevo = new Libro(autorLibro, nombreLibro, lenguajeLibro);
-
-                hashTable.get(palabras.getString("NOMBRE_PALABRA").hashCode()).addLibro(libroNuevo);
-                if (!existeLibro(libroNuevo)) {
-                    librosCargados.add(libroNuevo);
+            String busqueda = "Select * FROM PALABRAS";
+            ArrayList<String> palabras[] = accesoBD.query(busqueda);
+            
+            
+            
+            if (palabras[0].size() != 0) {
+                for (int i = 0; i < palabras[0].size(); i++) {
+                    String palabraAgregar = palabras[0].get(i);
+                    int contadorPalabra = Integer.parseInt(palabras[1].get(i));
+                    hashTable.put(palabraAgregar.hashCode(), new Palabra(palabraAgregar, contadorPalabra));
                 }
+
+                //ESTE JOIN ESTA FALLANDO!!
+                
+                busqueda = "SELECT * FROM PALABRAxLIBRO PL JOIN LIBROS L ON PL.ID_LIBRO = L.ID_LIBRO";
+                ArrayList<String> palabrasXlibro[] = accesoBD.query(busqueda);
+ 
+                System.out.println("O1 + " +palabrasXlibro[0].size());
+                
+                for (int i = 0; i < palabrasXlibro[0].size(); i++) {
+                    String nombreLibro = palabrasXlibro[3].get(i);
+                    String autorLibro = palabrasXlibro[4].get(i);
+                    String lenguajeLibro = palabrasXlibro[5].get(i);
+                    Libro libroNuevo = new Libro(autorLibro, nombreLibro, lenguajeLibro);
+                    
+                    System.out.println("O2");                    
+                    hashTable.get(palabrasXlibro[1].get(i).hashCode()).addLibro(libroNuevo);
+                    if (!existeLibro(libroNuevo)) {
+                        librosCargados.add(libroNuevo);
+                        System.out.println("O3");
+                    }
+                }
+
             }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+        } catch (Exception e) {
+            System.out.println("" + e.getMessage());
         }
     }
-/*
+
     public void guardarPalabras() {
         try {
-            
+
             String insert = "", select = "", update = "";
             Enumeration e = hashTable.keys();
             int clave;
@@ -76,32 +86,37 @@ public class Gestor {
             while (e.hasMoreElements()) {
                 clave = (Integer) e.nextElement();//Se busca la clave hash
                 valor = hashTable.get(clave);//Se busca la Palabra en esa posicion hash
-                select = "SELECT * FROM PALABRA WHERE NOMBRE_PALABRA like '" + valor.getContenido() + "'";
-                ResultSet resultado = accesoBD.query(select);
-                System.out.println("llegue");
-                if (!resultado.next()) {
+                select = "SELECT * FROM PALABRAS WHERE CONTENIDO_PALABRA = '" + valor.getContenido() + "'";
+                ArrayList<String> busqueda[] = accesoBD.query(select);
+                
+                
+                if (busqueda[0].size() == 0) {
                     System.out.println("palabra no encontrada");
-                    insert = "INSERT INTO PALABRA VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
+                    insert = "INSERT INTO PALABRAS VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
                     accesoBD.noQuery(insert);
+                
+                    
                     for (Libro libro : valor.getLibros()) {
-                        insert = "INSERT INTO LIBRO (AUTOR_LIBRO, TITULO_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getAutor() + "', '" + libro.getTitulo() + "', '" + libro.getIdioma() + "')";
+                        insert = "INSERT INTO LIBROS (NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getAutor() + "', '" + libro.getTitulo() + "', '" + libro.getIdioma() + "')";
                         accesoBD.noQuery(insert);
-                        select = "SELECT * FROM LIBRO WHERE TITULO_LIBRO like '" + libro.getTitulo() + "' AND AUTOR_LIBRO like '" + libro.getAutor() + "'";
-                        ResultSet esteLibro = accesoBD.query(select);
-                        insert = "INSERT INTO PALABRAXLIBRO VALUES ('" + valor.getContenido() + "', " + esteLibro.getString("ID_LIBRO") + ")";
+                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
+                        ArrayList<String> esteLibro[] = accesoBD.query(select);
+                        insert = "INSERT INTO PALABRAXLIBRO VALUES ('" + esteLibro[0].get(0) + "', " + valor.getContenido() + ")";
                         accesoBD.noQuery(insert);
+                        
                     }
                 } else {
                     System.out.println("estaba la palabra");
-                    update = "UPDATE PALABRA SET CANTIDAD_PALABRA = " + valor.getContador();
+                    update = "UPDATE PALABRAS SET CONTADOR_PALABRA = " + valor.getContador();
                     accesoBD.noQuery(update);
+                    
                     for (Libro libro : valor.getLibros()) {
-                        select = "SELECT * FROM LIBRO WHERE TITULO_LIBRO like '" + libro.getTitulo() + "' AND AUTOR_LIBRO like '" + libro.getAutor() + "'";
-                        ResultSet esteLibro = accesoBD.query(select);
-                        if (!esteLibro.first()) {
-                            insert = "INSERT INTO LIBRO (AUTOR_LIBRO, TITULO_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getAutor() + "', '" + libro.getTitulo() + "', '" + libro.getIdioma() + "')";
+                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
+                        ArrayList<String> esteLibro[] = accesoBD.query(select);
+                        if (esteLibro[0].size() == 0) {
+                            insert = "INSERT INTO LIBROS (AUTOR_LIBRO, NOMBRE_LIBRO, LENGUAJE_LIBRO) VALUES ('" + libro.getAutor() + "', '" + libro.getTitulo() + "', '" + libro.getIdioma() + "')";
                             accesoBD.noQuery(insert);
-                            insert = "INSERT INTO PALABRAXLIBRO VALUES ('" + valor.getContenido() + "', " + esteLibro.getString("ID_LIBRO") + ")";
+                            insert = "INSERT INTO PALABRAXLIBRO VALUES ('" + esteLibro[0].get(0) + "', " + valor.getContenido() + ")";
                             accesoBD.noQuery(insert);
                         }
 
@@ -112,7 +127,7 @@ public class Gestor {
             System.out.println(e.getMessage());
         }
 
-    }*/
+    }
         
     public void cargarPalabras(ArrayList<File> listaArchivo) {
         for (File archivo : listaArchivo) {
