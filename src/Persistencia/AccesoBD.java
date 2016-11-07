@@ -1,101 +1,71 @@
-
 package Persistencia;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AccesoBD {
-    private static String conexion;
-    private static String driver;
-    private static String usuario;
-    private static String contraseña;
+    private Conexion conexion;
     
     public AccesoBD(){
-        conexion = "jdbc:derby://localhost:1527/BD_Vocabulario";
-        driver = "com.mysql.jdbc.Driver";
-        usuario = "Marcelo";
-        contraseña = " ";
-        
+        conexion = new Conexion();
     }
-    
-    
-    private static Connection crearConexion()
-    {      
-        Connection con = null;
-        try           
-        {            
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            con = DriverManager.getConnection(conexion, "APP", contraseña);
-        }
-        catch (Exception ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        return con;
-    }    
-    
-    
-    public ResultSet query(String consulta) throws SQLException{
-        ResultSet resultado = null;
-        Connection con = null;
-        Statement stm = null;
-        try
-        {
-            con = crearConexion();
-            con.setAutoCommit(false);
-            stm = con.createStatement();
-            resultado = stm.executeQuery(consulta);
-            
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage());   
-        }
-        finally
-        {
-//            resultado.close();
-//            stm.close();
-            cerrar(con);
-        }
-        return resultado;
-    }
-    
-    
-    public void noQuery(String consulta){
-        Connection con = null;
-        Statement stm = null;
-        try
-        {
-            con = crearConexion();
-            stm  = con.createStatement();
-            boolean update = stm.execute(consulta);
-            System.out.println(update);
-            stm.close();       
-            
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        finally{
-            
-            cerrar(con);
-        }
-        
-    }
-    
-    public void cerrar(Connection con){
+     
+    public ArrayList<String>[] query(String sql) {
+        //Connection conexion = this.conexion.conectarBD();
+        ArrayList<String>[] retorno = null;
+
         try {
-            con.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            PreparedStatement preparedStatement = conexion.conectarBD().prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int cantidadColumnas = metaData.getColumnCount();
+/*
+            System.out.println(""+ cantidadColumnas);
+            
+            System.out.println(""+ metaData.getColumnName(1));
+            
+             System.out.println(""+ metaData.getColumnName(2));
+           */
+            retorno = new ArrayList[cantidadColumnas];
+            
+            for (int i = 0; i < cantidadColumnas; i++) {
+                retorno[i] = new ArrayList<>();
+            }
+            
+            while (resultSet.next()) {
+                for (int i = 0; i < cantidadColumnas; i++) {
+                   retorno[i].add(resultSet.getString(metaData.getColumnName(i+1)));
+                }
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            System.out.println("ERROR: CATCH LINEA 36 - " + e.getMessage());
+        } finally {
+            conexion.desconectarBD();
         }
+
+        return retorno;
     }
-    
-    public void transaccion(String transaccion){
-        
-        
+
+    public boolean noQuery(String sql) {
+        boolean retorno = false;
+
+        try {
+            PreparedStatement preparedStatement = conexion.conectarBD().prepareStatement(sql);
+            preparedStatement.execute();
+            preparedStatement.close();
+            retorno = true;
+
+        } catch (SQLException ex) {
+            System.out.println("ERROR LINEA 54 - " + ex.getMessage());
+        } finally {
+            conexion.desconectarBD();
+        }
+
+        return retorno;
     }
-    
 }

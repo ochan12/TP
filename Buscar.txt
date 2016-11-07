@@ -1,7 +1,0 @@
-Bulk insert
-desactivar autocommit
-insert into
-	values
-	values
-	values
- se puede?
