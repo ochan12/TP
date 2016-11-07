@@ -1,5 +1,6 @@
-package interfaz;
+package Interfaz;
 
+import Logica.Gestor;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -7,14 +8,13 @@ import java.util.Scanner;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import tp.*;
 
 public class Principal extends javax.swing.JFrame {
 
     public Principal() {
         initComponents();        
         gestor = new Gestor();
-        gestor.cargarPalabras();
+        //gestor.cargarPalabras();
         listaArchivosSeleccionados = new ArrayList<File>();
     }
 
@@ -198,7 +198,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_cargarPalabrasActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        gestor.guardarPalabras();
+       // gestor.guardarPalabras();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

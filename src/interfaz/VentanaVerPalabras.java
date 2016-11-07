@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfaz;
+package Interfaz;
 
+import Logica.Gestor;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import tp.*;
 
 /**
  *
@@ -163,7 +163,7 @@ public class VentanaVerPalabras extends javax.swing.JFrame {
     {
         this.gestor = gestor;
     }
-    private tp.Gestor gestor;
+    private Logica.Gestor gestor;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField filtroPalabras;
     private javax.swing.JLabel jLabel1;
