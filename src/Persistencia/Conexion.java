@@ -15,7 +15,6 @@ public class Conexion {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             //obtenemos la conexión
             conexion = DriverManager.getConnection("jdbc:derby:.\\DB\\Vocabulario.DB");
-            //conexion = DriverManager.getConnection("jdbc:derby:.\\BD_Vocabulario");
             if (conexion != null) {
                 System.out.println("OK base de datos listo");
             }
