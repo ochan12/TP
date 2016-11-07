@@ -23,7 +23,15 @@ public class Main {
         
         ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");
         
-        System.out.println(""+ arreglo[1].toString());
+        for (int j = 0; j < arreglo[0].size(); j++) {
+            for (int i = 0; i < arreglo.length; i++) {
+                 System.out.print(" " + arreglo[i].get(j).toString());
+            }
+            System.out.println(" ");
+        }
+
+        
+        System.out.println(""+ arreglo[0].toString() + arreglo[1].toString() );
         
        
             
