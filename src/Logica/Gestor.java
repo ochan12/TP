@@ -69,6 +69,12 @@ public class Gestor {
 
 
     public void guardarPalabras() {
+        int progresoBarra = 1;
+
+        Interfaz.BarraProgreso barraActual = this.mostrarBarraProgreso();
+        barraActual.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        barraActual.setVisible(true);
+        
         try {
 
             String insert = "", select = "", update = "";
@@ -115,10 +121,13 @@ public class Gestor {
                         }
                     }
                 }
+                barraActual.actualizarBarraProgreso(progresoBarra);
+                progresoBarra++;
             }
         } catch (Exception e) {
             System.out.println("ERROR GUARDAR PALABRA: " + e.getMessage());
         }
+        barraActual.dispose();
     }
 
                
@@ -271,6 +280,13 @@ public class Gestor {
     private Interfaz.BarraProgreso mostrarBarraProgreso(File archivo, String tituloLibro) {
         Interfaz.BarraProgreso barra = new Interfaz.BarraProgreso();
         barra.crearBarra(this.calcularCantidadLineas(archivo), tituloLibro);
+        barra.setVisible(true);
+        return barra;
+    }
+    
+    private Interfaz.BarraProgreso mostrarBarraProgreso() {
+        Interfaz.BarraProgreso barra = new Interfaz.BarraProgreso();
+        barra.crearBarra(hashTable.size());
         barra.setVisible(true);
         return barra;
     }

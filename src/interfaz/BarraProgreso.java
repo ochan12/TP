@@ -82,11 +82,19 @@ public class BarraProgreso extends javax.swing.JFrame  {
         bp_barra.setValue(0);
         bp_barra.setVisible(true);
     }
+    
+    public void crearBarra(int cantidadLineas){
+        this.setTitle("Guardando");
+        bp_barra.setMinimum(0);
+        bp_barra.setMaximum(cantidadLineas);
+        bp_barra.setValue(0);
+        bp_barra.setVisible(true);
+    }
         
     public void actualizarBarraProgreso(final int progresoBarra) throws Exception {
         bp_barra.setValue(progresoBarra);
         bp_barra.repaint();        
-    }    
+    }   
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar bp_barra;

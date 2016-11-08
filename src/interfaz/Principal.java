@@ -203,8 +203,13 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_cargarPalabrasActionPerformed
    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       gestor.guardarPalabras();
-       
+       Runnable corredor = new Runnable() {
+            public void run() {
+                gestor.guardarPalabras();
+            }
+        };
+        Thread nuevoHilo = new Thread(corredor, "Code Executer");
+        nuevoHilo.start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {

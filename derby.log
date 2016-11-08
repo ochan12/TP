@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Mon Nov 07 23:25:55 GMT-03:00 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0158-41c1-9480-000008193ea8 
-on database directory F:\Mauri\GitHub\TP\DB\Vocabulario.DB with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
-Loaded from file:/F:/Mauri/GitHub/TP/src/Controlador/derby.jar
+Mon Nov 07 23:42:31 GMT-03:00 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0158-41d0-c570-00000310da10 
+on database directory C:\Marcelo\Facultad\3º año\Tecnología de software de Base\Trabajo Práctico palabras\TP\DB\Vocabulario.DB with class loader sun.misc.Launcher$AppClassLoader@6d06d69c 
+Loaded from file:/C:/Marcelo/Facultad/3%c2%ba%20a%c3%b1o/Tecnolog%c3%ada%20de%20software%20de%20Base/Trabajo%20Pr%c3%a1ctico%20palabras/TP/src/Controlador/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_11-b12
-user.dir=F:\Mauri\GitHub\TP
+user.dir=C:\Marcelo\Facultad\3º año\Tecnología de software de Base\Trabajo Práctico palabras\TP
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1
