@@ -210,6 +210,8 @@ public class Principal extends javax.swing.JFrame {
         };
         Thread nuevoHilo = new Thread(corredor, "Code Executer");
         nuevoHilo.start();
+        
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
