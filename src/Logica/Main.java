@@ -7,36 +7,13 @@ public class Main {
 
     public static void main(String[] args)
     {
-        //Persistencia.AccesoBD acceso = new Persistencia.AccesoBD();
-        //acceso.noQuery("DELETE FROM PALABRAxLIBRO");
-        //acceso.noQuery("DELETE FROM PALABRAS");
-        //acceso.noQuery("DELETE FROM LIBROS");
+        Persistencia.AccesoBD acceso = new Persistencia.AccesoBD();
+        acceso.noQuery("DELETE FROM PALABRAxLIBRO");
+        acceso.noQuery("DELETE FROM PALABRAS");
+        acceso.noQuery("DELETE FROM LIBROS");
         
         Interfaz.Principal P = new Interfaz.Principal();
-        P.setVisible(true);
-
-
-        
-        
-        //acceso.noQuery("INSERT INTO PALABRAS VALUES('el', 3)");
-        /*
-        ArrayList <String>[] arreglo =  acceso.query("SELECT * FROM PALABRAS");
-        
-        for (int j = 0; j < arreglo[0].size(); j++) {
-            for (int i = 0; i < arreglo.length; i++) {
-                 System.out.print(" " + arreglo[i].get(j).toString());
-            }
-            System.out.println(" ");
-        }
-
-        
-        System.out.println(""+ arreglo[0].toString() + arreglo[1].toString() );
-       
-       
-        */
-        
-            
-        
+        P.setVisible(true);        
     }
 }
 

@@ -13,6 +13,9 @@ public class Gestor {
     private Interfaz.VentanaVerPalabras ventanaPalabras; //Declaramos la ventana para visualizar la tabla
     private Hashtable<Integer, Palabra> hashTable;
     private ArrayList<Libro> librosCargados;
+    private ArrayList<Libro> librosViejos;
+    private ArrayList<Libro> librosNuevos;
+    private ArrayList<Libro> librosAgregadosBD;
     private Persistencia.AccesoBD accesoBD;
 
     //Constructor
@@ -20,6 +23,9 @@ public class Gestor {
         ventanaPalabras = new Interfaz.VentanaVerPalabras();
         hashTable = new Hashtable<Integer, Palabra>();
         librosCargados = new ArrayList<Libro>();
+        librosViejos = new ArrayList<Libro>();
+        librosNuevos = new ArrayList<Libro>();
+        librosAgregadosBD = new ArrayList<Libro>();
         accesoBD = new Persistencia.AccesoBD();
     }
 
@@ -45,12 +51,13 @@ public class Gestor {
                     String autorLibro = palabrasXlibro[4].get(i);
                     String lenguajeLibro = palabrasXlibro[5].get(i);
                     Libro libroNuevo = new Libro(autorLibro, nombreLibro, lenguajeLibro);
-
+                    
+                    libroNuevo.setID(Integer.parseInt(palabrasXlibro[2].get(i)));
                     hashTable.get(palabrasXlibro[1].get(i).hashCode()).agregarLibro(libroNuevo);
 
                     if (!existeLibro(libroNuevo)) {
-                        libroNuevo.setID(librosCargados.size());
                         librosCargados.add(libroNuevo);
+                        librosViejos.add(libroNuevo);
                     }
                 }
 
@@ -60,47 +67,51 @@ public class Gestor {
         }
     }
 
+
     public void guardarPalabras() {
         try {
 
             String insert = "", select = "", update = "";
             Enumeration e = hashTable.keys();
-            int clave;
-            Palabra valor;
+
             while (e.hasMoreElements()) {
-                clave = (Integer) e.nextElement();//Se busca la clave hash
-                valor = hashTable.get(clave);//Se busca la Palabra en esa posicion hash
-                select = "SELECT * FROM PALABRAS WHERE CONTENIDO_PALABRA = '" + valor.getContenido() + "'";
-                ArrayList<String> busqueda[] = accesoBD.query(select);
+                int clave = (Integer) e.nextElement();//Se busca la clave hash
+                Palabra valor = hashTable.get(clave);//Se busca la Palabra en esa posicion hash
 
-                if (busqueda[0].size() == 0) {
-                    insert = "INSERT INTO PALABRAS VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
-                    accesoBD.noQuery(insert);
+                if (estaEnLibroNuevo(valor.getLibros())) {
+                    if (estaEnLibroViejo(valor.getLibros())) {
+                        
+                        update = "UPDATE PALABRAS SET CONTADOR_PALABRA = " + valor.getContador() + " WHERE CONTENIDO_PALABRA = '" + valor.getContenido() + "'";
+                        accesoBD.noQuery(update);
 
-                    
-                    for (Libro libro : valor.getLibros()) {
-                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
-                        ArrayList<String> esteLibro[] = accesoBD.query(select);
-
-                        if (esteLibro[0].size() == 0) {
-                            insert = "INSERT INTO LIBROS (ID_LIBRO, NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES ("+ libro.getID() +", '" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
-                            accesoBD.noQuery(insert);
+                        for (Libro libro : valor.getLibros()) {
+                            if (estaEnLibroNuevo(libro)) {
+                                if (!estaEnLibroAgregadoBD(libro)){
+                                    insert = "INSERT INTO LIBROS (ID_LIBRO, NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES (" + libro.getID() + ", '" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
+                                    accesoBD.noQuery(insert);
+                                    
+                                    this.librosAgregadosBD.add(libro);
+                                }
+                                
+                                insert = "INSERT INTO PALABRAXLIBRO VALUES (" + libro.getID() + ", '" + valor.getContenido() + "')";
+                                accesoBD.noQuery(insert);
+                            }
                         }
-
-                        insert = "INSERT INTO PALABRAXLIBRO VALUES (" + libro.getID() + ", '" + valor.getContenido() + "')";
+                    } else {
+                        insert = "INSERT INTO PALABRAS VALUES('" + valor.getContenido() + "', " + valor.getContador() + ")";
                         accesoBD.noQuery(insert);
-
-                    }
-                } else {
-                    update = "UPDATE PALABRAS SET CONTADOR_PALABRA = " + valor.getContador();
-                    accesoBD.noQuery(update);
-
-                    for (Libro libro : valor.getLibros()) {
-                        select = "SELECT * FROM LIBROS WHERE NOMBRE_LIBRO = '" + libro.getTitulo() + "' AND AUTOR_LIBRO = '" + libro.getAutor() + "'";
-                        ArrayList<String> esteLibro[] = accesoBD.query(select);
-                        if (esteLibro[0].size() == 0) {
+                        
+                        for (Libro libro : valor.getLibros()) {
+                            if (!estaEnLibroAgregadoBD(libro)){
+                                insert = "INSERT INTO LIBROS (ID_LIBRO, NOMBRE_LIBRO, AUTOR_LIBRO, LENGUAJE_LIBRO) VALUES (" + libro.getID() + ", '" + libro.getTitulo() + "', '" + libro.getAutor() + "', '" + libro.getIdioma() + "')";
+                                accesoBD.noQuery(insert);
+                                
+                                this.librosAgregadosBD.add(libro);
+                            }
+                            
                             insert = "INSERT INTO PALABRAXLIBRO VALUES (" + libro.getID() + ", '" + valor.getContenido() + "')";
                             accesoBD.noQuery(insert);
+                            
                         }
                     }
                 }
@@ -108,25 +119,29 @@ public class Gestor {
         } catch (Exception e) {
             System.out.println("ERROR GUARDAR PALABRA: " + e.getMessage());
         }
-
     }
+
+               
+    
+    
 
     public void cargarPalabras(ArrayList<File> listaArchivo) {
         for (File archivo : listaArchivo) {
             try {
-                
+
                 Libro nuevoLibro = this.tomarDatosLibros(archivo);
-                
+
                 if (!existeLibro(nuevoLibro)) {
                     nuevoLibro.setID(librosCargados.size());
                     librosCargados.add(nuevoLibro);
+                    librosNuevos.add(nuevoLibro);
                     this.cargarPalabrasEnHash(archivo, nuevoLibro);
                 }
-                
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        }        
+        }
     }
 
     //Comprueba que la palabra no contenga ninguno de estos caracteres: @(arroba),0,1,2,3,4,5,6,7,8,9
@@ -215,7 +230,7 @@ public class Gestor {
                 {
                     if (validarPalabra(palabra)) {
                         palabra = palabra.toLowerCase(); //Convertir la palabra a letra minúscula
-                        // System.out.println(palabra + " - ");  // PARA PROBAR
+                        
 
                         //Verificamos que la tabla no esté vacía, en caso de no estarlo buscamos si la palabra a ser ingresada existe o no
                         //Si la palabra existe sumamos el contador
@@ -292,6 +307,79 @@ public class Gestor {
         ventanaPalabras.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventanaPalabras.setVisible(true);
     }
-;
 
+    public boolean estaEnLibroViejo(ArrayList<Libro> libros) {
+        if (libros != null) {
+            if (libros.size() != 0) {
+                for (Libro libro : libros) {
+                    for (Libro libroViejo : this.librosViejos) {
+                        if (libro.compareTo(libroViejo) == 0) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean estaEnLibroNuevo(ArrayList<Libro> libros) {
+        if (libros != null) {
+            if (libros.size() != 0) {
+                for (Libro libro : libros) {
+                    for (Libro libroNuevo : this.librosNuevos) {
+                        if (libro.compareTo(libroNuevo) == 0) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    public boolean estaEnLibroViejo(Libro libro) {
+
+        if (libro != null) {
+
+            for (Libro libroViejo : this.librosViejos) {
+                if (libro.compareTo(libroViejo) == 0) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public boolean estaEnLibroNuevo(Libro libro) {
+
+        if (libro != null) {
+
+            for (Libro libroNuevo : this.librosNuevos) {
+                if (libro.compareTo(libroNuevo) == 0) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+
+    
+        public boolean estaEnLibroAgregadoBD(Libro libro) {
+
+        if (libro != null) {
+
+            for (Libro libroAgregado : this.librosAgregadosBD) {
+                if (libro.compareTo(libroAgregado) == 0) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
 }
